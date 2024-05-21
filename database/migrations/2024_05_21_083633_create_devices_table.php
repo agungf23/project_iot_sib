@@ -18,6 +18,8 @@ return new class extends Migration
             $table ->integer('max_value');
             $table ->integer('current_value');
             $table->enum('type', ['temperature', 'humidity', 'moisture', 'intensity']);
+            $table->float('value');
+            $table->foreignId('device_id')->constrained();
             $table->timestamps();
         });
     }
