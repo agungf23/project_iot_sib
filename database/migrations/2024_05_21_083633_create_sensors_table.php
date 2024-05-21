@@ -13,7 +13,9 @@ return new class extends Migration
     {
         Schema::create('sensors', function (Blueprint $table) {
             $table->id();
-            $table->enum('type', ['temperature', 'humidity', 'moisture', 'intensity']);
+            $table ->integer('min_value');
+            $table ->integer('max_value');
+            $table ->integer('current_value');
             $table->timestamps();
         });
     }
