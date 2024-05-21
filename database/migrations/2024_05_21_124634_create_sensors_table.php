@@ -11,15 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('devices', function (Blueprint $table) {
+        Schema::create('sensors', function (Blueprint $table) {
             $table->id();
-            $table ->string('name');
-            $table ->integer('min_value');
-            $table ->integer('max_value');
-            $table ->integer('current_value');
-            $table->enum('type', ['temperature', 'humidity', 'moisture', 'intensity']);
-            $table->float('value');
-            $table->foreignId('device_id')->constrained();
+            $table->string('name');
+            $table->enum('sensor_type', ['temperature', 'humidity', 'moisture', 'intensity']);
             $table->timestamps();
         });
     }
