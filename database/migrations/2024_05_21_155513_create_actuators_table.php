@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('actuators', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('sensor_reading_id')->nullable()->constrained('sensor_readings')->cascadeOnDelete();
             $table->string('name');
             $table->enum('type', ['lamp', 'water_pump', 'display']);
             $table->timestamps();

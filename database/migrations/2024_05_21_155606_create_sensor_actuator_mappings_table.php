@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('sensor_id')->constrained('sensors')->cascadeOnDelete();
             $table->foreignId('actuator_id')->constrained('actuators')->cascadeOnDelete();
-            $table->int('trigger_value');
+            $table->integer('trigger_value');
             $table->timestamps();
         });
     }
