@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('sensor_readings', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('sensor_log_id')->constrained('sensor_logs')->cascadeOnDelete();
+            $table->foreignId('sensor_logs_id')->constrained('sensor_logs')->cascadeOnDelete();
             $table->float('reading_value');
             $table->float('max_value')->nullable();
             $table->float('min_value')->nullable();

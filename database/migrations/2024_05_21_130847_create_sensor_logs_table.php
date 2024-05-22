@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('sensor_logs', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('sensor_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('sensors_id')->constrained()->cascadeOnDelete();
             $table->float('current_value');
             $table->timestamps();
         });
