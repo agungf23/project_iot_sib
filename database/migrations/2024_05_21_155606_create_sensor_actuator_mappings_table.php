@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('sensor_actuator_mappings', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('sensor_id')->constrained('sensors')->cascadeOnDelete();
+            // $table->foreignId('sensor_id')->constrained('sensors')->cascadeOnDelete();
             $table->foreignId('actuator_id')->constrained('actuators')->cascadeOnDelete();
             $table->integer('trigger_value');
             $table->timestamps();
