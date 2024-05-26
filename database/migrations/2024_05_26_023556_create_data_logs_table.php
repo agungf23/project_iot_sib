@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('data_logs', function (Blueprint $table) {
-            $table->id('data_id');
+            $table->id();
             $table->foreignId('device_id')->constrained('transducers');
             $table->float('value');
             $table->integer('max_value');

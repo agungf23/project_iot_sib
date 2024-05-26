@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('transducers', function (Blueprint $table) {
-            $table->id('device_id');
+            $table->id();
             $table->string('device_name');
             $table->enum('device_type', ['Sensor', 'Actuator']);
             $table->timestamps();
