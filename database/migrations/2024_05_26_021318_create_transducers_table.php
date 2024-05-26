@@ -11,12 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('sensor_readings', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('sensor_log_id')->constrained('sensor_logs')->cascadeOnDelete();
-            $table->float('reading_value');
-            $table->float('max_value')->nullable();
-            $table->float('min_value')->nullable();
+        Schema::create('transducers', function (Blueprint $table) {
+            $table->id('device_id');
+            $table->string('device_name');
+            $table->enum('device_type', ['Sensor', 'Actuator']);
             $table->timestamps();
         });
     }
@@ -26,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('sensor_readings');
+        Schema::dropIfExists('transducers');
     }
 };

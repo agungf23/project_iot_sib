@@ -11,10 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('sensors', function (Blueprint $table) {
-            $table->id();
-            $table->string('name');
-            $table->enum('sensor_type', ['temperature', 'humidity', 'moisture', 'intensity']);
+        Schema::create('data_logs', function (Blueprint $table) {
+            $table->id('data_id');
+            $table->foreignId('device_id')->constrained('transducers');
+            $table->float('value');
+            $table->integer('max_value');
+            $table->integer('min_value');
             $table->timestamps();
         });
     }
@@ -24,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('sensors');
+        Schema::dropIfExists('data_logs');
     }
 };
