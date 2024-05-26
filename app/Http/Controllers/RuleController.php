@@ -2,7 +2,8 @@
 
 namespace App\Http\Controllers;
 
-
+// use App\Models\Log;
+use App\Models\Rule;
 use Illuminate\Http\Request;
 
 class RuleController extends Controller
@@ -12,7 +13,7 @@ class RuleController extends Controller
      */
     public function index()
     {
-        //
+        return Rule::all();
     }
 
     /**
@@ -20,7 +21,18 @@ class RuleController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'rule_cluster_id' => 'required|integer',
+            'sensor_id' => 'required|exists:data_logs,id',
+            'sensor_operator' => 'required|in:more than,less than',
+            'sensor_value' => 'required|numeric',
+            'actuator_id' => 'required|exists:data_logs,id',
+            'actuator_value' => 'required|numeric',
+        ]);
+
+        $rule = Rule::create($request->all());
+
+        return response()->json(['message' => 'Rule created successfully.', 'rule' => $rule], 201);
     }
 
     /**
@@ -28,7 +40,8 @@ class RuleController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $rule = Rule::findOrFail($id);
+        return $rule;
     }
 
     /**
@@ -36,7 +49,19 @@ class RuleController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $request->validate([
+            'rule_cluster_id' => 'sometimes|required|integer',
+            'sensor_id' => 'sometimes|required|exists:data_logs,id',
+            'sensor_operator' => 'sometimes|required|in:more than,less than',
+            'sensor_value' => 'sometimes|required|numeric',
+            'actuator_id' => 'sometimes|required|exists:data_logs,id',
+            'actuator_value' => 'sometimes|required|numeric',
+        ]);
+
+        $rule = Rule::findOrFail($id);
+        $rule->update($request->all());
+
+        return response()->json(['message' => 'Rule updated successfully.', 'rule' => $rule], 200);
     }
 
     /**
@@ -44,6 +69,9 @@ class RuleController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $rule = Rule::findOrFail($id);
+        $rule->delete();
+
+        return response()->json(['message' => 'Rule deleted successfully.'], 200);
     }
 }
