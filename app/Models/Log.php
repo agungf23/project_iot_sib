@@ -9,10 +9,10 @@ class Log extends Model
 {
     use HasFactory;
 
-    // protected $fillable = [
-    //     'device_id',
-    //     'value',
-    //     'max_value',
-    //     'min_value',
-    // ];
+    protected $fillable = [
+        'device_id',
+        'value',
+        'max_value',
+        'min_value',
+    ];
 }

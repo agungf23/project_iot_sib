@@ -9,7 +9,7 @@ use Illuminate\Http\Request;
 class LogController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Display a listin of the resource.
      */
     public function index()
     {
@@ -29,12 +29,12 @@ class LogController extends Controller
             'min_value' => 'required|integer',
         ]);
 
-        $dataLog = new Log();
-        $dataLog->device_id = $request->device_id;
-        $dataLog->value = $request->value;
-        $dataLog->max_value = $request->max_value;
-        $dataLog->min_value = $request->min_value;
-        $dataLog->save();
+        $datalog = new Log();
+        $datalog->device_id = $request->device_id;
+        $datalog->value = $request->value;
+        $datalog->max_value = $request->max_value;
+        $datalog->min_value = $request->min_value;
+        $datalog->save();
 
         if(Transducer::where('id', $request->device_id)->exists()){
             $transducer = Transducer::find($request->device_id);
@@ -44,17 +44,17 @@ class LogController extends Controller
 
     }
 
-    /**
-     * Display the specified resource.
-     */
+    // /**
+    //  * Display the specified resource.
+    //  */
     public function show(string $id)
     {
         return Log::where('device_id', $id)->orderby('created_at', 'DESC')->get();
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
+    // /**
+    //  * Update the specified resource in storage.
+    //  */
     public function update(Request $request, string $id)
     {
         $request->validate([
@@ -76,17 +76,13 @@ class LogController extends Controller
         }
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
+    // /**
+    //  * Remove the specified resource from storage.
+    //  */
     public function destroy(string $id)
     {
-        if (Log::where('id', $id)->exists()) {
-            $datalog = Log::find($id);
-            $datalog->delete();
-            return response()->json(["message" => "Device deleted."], 201);
-        } else {
-            return response()->json(["message" => "Device not found."], 404);
-        }
+        $datalog = Log::find($id);
+        $datalog->delete();
+        return response()->json(["message" => "Log deleted."], 201);
     }
 }
