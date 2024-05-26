@@ -59,9 +59,10 @@ class TransducerController extends Controller
             $transducer->save();
 
             return response()->json(["message" => "Device updated."], 201);
-            } else {
-                return response()->json(["message" => "Device not found."], 404);
-            }
+        } else {
+            return response()->json(["message" => "Device not found."], 404);
+        }
+
     }
 
     /**
