@@ -4,7 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\TransducerController;
 use App\Http\Controllers\LogController;
-use App\Htt
+use App\Http\Controllers\RuleController;
 
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
@@ -22,8 +22,6 @@ Route::post('/log', [LogController::class, 'store']);
 Route::get('/log/{id}', [LogController::class, 'show']);
 Route::put('/log/{id}', [LogController::class, 'update']);
 Route::delete('/log/{id}', [LogController::class, 'destroy']);
-
-use App\Http\Controllers\RuleController;
 
 Route::get('/rule', [RuleController::class, 'index']);
 Route::post('/rule', [RuleController::class, 'store']);
