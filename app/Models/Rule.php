@@ -9,6 +9,8 @@ class Rule extends Model
 {
     use HasFactory;
 
+    protected $primaryKey = 'rule_id';
+
     protected $fillable = [
         'rule_cluster_id',
         'sensor_id',

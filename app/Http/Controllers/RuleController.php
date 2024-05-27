@@ -68,9 +68,12 @@ class RuleController extends Controller
      */
     public function destroy(string $id)
     {
-        $rule = Rule::findOrFail($id);
-        $rule->delete();
-
-        return response()->json(['message' => 'Rule deleted successfully.'], 200);
+        if (Rule::where('rule_id', $id)->exists()) {
+            $rule = Rule::find($id);
+            $rule->delete();
+            return response()->json(["message" => "Rule deleted."], 201);
+        } else {
+            return response()->json(["message" => "Rule not found."], 404);
+        }
     }
 }
