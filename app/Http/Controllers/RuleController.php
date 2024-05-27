@@ -22,10 +22,10 @@ class RuleController extends Controller
     {
         $request->validate([
             'rule_cluster_id' => 'required|integer',
-            'sensor_id' => 'required|exists:data_logs,id',
+            'sensor_id' => 'required|exists:logs,id',
             'sensor_operator' => 'required|in:more than,less than',
             'sensor_value' => 'required|numeric',
-            'actuator_id' => 'required|exists:data_logs,id',
+            'actuator_id' => 'required|exists:logs,id',
             'actuator_value' => 'required|numeric',
         ]);
 
@@ -50,8 +50,7 @@ class RuleController extends Controller
      */
     public function show(string $id)
     {
-        $rule = Rule::findOrFail($id);
-        return $rule;
+        $rule = Rule::find($id);;
     }
 
     /**
@@ -61,17 +60,22 @@ class RuleController extends Controller
     {
         $request->validate([
             'rule_cluster_id' => 'sometimes|required|integer',
-            'sensor_id' => 'sometimes|required|exists:data_logs,id',
+            'sensor_id' => 'sometimes|required|exists:logs,id',
             'sensor_operator' => 'sometimes|required|in:more than,less than',
             'sensor_value' => 'sometimes|required|numeric',
-            'actuator_id' => 'sometimes|required|exists:data_logs,id',
+            'actuator_id' => 'sometimes|required|exists:logs,id',
             'actuator_value' => 'sometimes|required|numeric',
         ]);
 
-        $rule = Rule::findOrFail($id);
-        $rule->update($request->all());
+        if (Rule::where('id', $id)->exists()) {
+            $rule = Rule::find($id);
+            $rule->update($request->all());
+            $rule->save();
 
-        return response()->json(['message' => 'Rule updated successfully.', 'rule' => $rule], 200);
+        return response()->json(["message" => "Device updated."], 201);
+        } else {
+            return response()->json(["message" => "Device not found."], 404);
+        }
     }
 
     /**
@@ -79,7 +83,7 @@ class RuleController extends Controller
      */
     public function destroy(string $id)
     {
-        $rule = Rule::findOrFail($id);
+        $rule = Rule::find($id);
         $rule->delete();
 
         return response()->json(['message' => 'Rule deleted successfully.'], 200);
