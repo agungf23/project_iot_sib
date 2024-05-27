@@ -49,7 +49,7 @@ class LogController extends Controller
     //  */
     public function show(string $id)
     {
-        return Log::where('device_id', $id)->orderby('created_at', 'DESC')->get();
+        return Log::find($id);
     }
 
     // /**
