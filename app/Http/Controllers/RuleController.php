@@ -29,20 +29,9 @@ class RuleController extends Controller
             'actuator_value' => 'required|numeric',
         ]);
 
-        // $rule = Rule::create($request->all());
+        $rule = Rule::create($request->all());
 
-        // return response()->json(['message' => 'Rule created successfully.', 'rule' => $rule], 201);
-
-        $rule = new Rule();
-        $rule->rule_cluster_id = $request->rule_cluster_id;
-        $rule->sensor_id = $request->sensor_id;
-        $rule->sensor_operator = $request->sensor_operator;
-        $rule->sensor_value = $request->sensor_value;
-        $rule->actuator_id = $request->actuator_id;
-        $rule->actuator_value = $request->actuator_value;
-        $rule->save();
-
-        return response()->json(["message" => "Device updated."], 201);
+        return response()->json(['message' => 'Rule created successfully.', 'rule' => $rule], 201);
     }
 
     /**
@@ -50,7 +39,8 @@ class RuleController extends Controller
      */
     public function show(string $id)
     {
-        $rule = Rule::find($id);;
+        $rule = Rule::findOrFail($id);
+        return $rule;
     }
 
     /**
@@ -67,15 +57,10 @@ class RuleController extends Controller
             'actuator_value' => 'sometimes|required|numeric',
         ]);
 
-        if (Rule::where('id', $id)->exists()) {
-            $rule = Rule::find($id);
-            $rule->update($request->all());
-            $rule->save();
+        $rule = Rule::findOrFail($id);
+        $rule->update($request->all());
 
-        return response()->json(["message" => "Device updated."], 201);
-        } else {
-            return response()->json(["message" => "Device not found."], 404);
-        }
+        return response()->json(['message' => 'Rule updated successfully.', 'rule' => $rule], 200);
     }
 
     /**
@@ -83,7 +68,7 @@ class RuleController extends Controller
      */
     public function destroy(string $id)
     {
-        $rule = Rule::find($id);
+        $rule = Rule::findOrFail($id);
         $rule->delete();
 
         return response()->json(['message' => 'Rule deleted successfully.'], 200);
