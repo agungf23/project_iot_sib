@@ -29,9 +29,20 @@ class RuleController extends Controller
             'actuator_value' => 'required|numeric',
         ]);
 
-        $rule = Rule::create($request->all());
+        // $rule = Rule::create($request->all());
 
-        return response()->json(['message' => 'Rule created successfully.', 'rule' => $rule], 201);
+        // return response()->json(['message' => 'Rule created successfully.', 'rule' => $rule], 201);
+
+        $rule = new Rule();
+        $rule->rule_cluster_id = $request->rule_cluster_id;
+        $rule->sensor_id = $request->sensor_id;
+        $rule->sensor_operator = $request->sensor_operator;
+        $rule->sensor_value = $request->sensor_value;
+        $rule->actuator_id = $request->actuator_id;
+        $rule->actuator_value = $request->actuator_value;
+        $rule->save();
+
+        return response()->json(["message" => "Device updated."], 201);
     }
 
     /**
