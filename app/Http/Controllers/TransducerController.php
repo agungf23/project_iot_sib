@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-
 use App\Models\Transducer;
 use Illuminate\Http\Request;
 
