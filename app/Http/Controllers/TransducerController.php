@@ -8,17 +8,15 @@ use Illuminate\Http\Request;
 
 class TransducerController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+
+    // Display a listing of the resource.
     public function index()
     {
         return Transducer::all();
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
+
+    // Store a newly created resource in storage.
     public function store(Request $request)
     {
         $request->validate([
@@ -34,17 +32,15 @@ class TransducerController extends Controller
             return response()->json(["message" => "Device updated."], 201);
     }
 
-    /**
-     * Display the specified resource.
-     */
+
+    // Display the specified resource.
     public function show(string $id)
     {
         return Transducer::find($id);
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
+
+    // Update the specified resource in storage.
     public function update(Request $request, string $id)
     {
         $request->validate([
@@ -62,12 +58,10 @@ class TransducerController extends Controller
         } else {
             return response()->json(["message" => "Device not found."], 404);
         }
-
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
+
+    // Remove the specified resource from storage.
     public function destroy(string $id)
     {
         if (Transducer::where('id', $id)->exists()) {
