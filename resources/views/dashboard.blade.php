@@ -1,6 +1,8 @@
 @extends('layouts.app')
 
 @section('content')
+    <h1 class="mt-4">Dashboard</h1>
+
     <div class="row">
         <div class="col-xl-3 col-md-6">
             <div class="card bg-primary text-white mb-4">
@@ -40,9 +42,33 @@
         </div>
     </div>
 
+    {{-- Actuator --}}
+    <div class="row">
+        <div class="col-lg-4">
+            <div class="card mb-4">
+                <div class="card-header">
+                    <i class="fas fa-lightbulb me-1"></i>
+                    Actuator Control
+                </div>
+                <div class="switch-container">
+                    <div class="form-check form-switch" style="margin-left: 20px;">
+                        <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault1">
+                        <label class="form-check-label" for="flexSwitchCheckDefault1" id="switchLabel1">Water Pump</label>
+                    </div>
+
+                    <div class="form-check form-switch" style="margin-left: 20px;">
+                        <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault2">
+                        <label class="form-check-label" for="flexSwitchCheckDefault2" id="switchLabel2">Lamp
+                            Indicator</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     {{-- Temperature --}}
     <div class="row">
-        <div class="col-xl-6">
+        <div class="col-lg-12">
             <div class="card mb-4">
                 <div class="card-header">
                     <i class="fas fa-chart-area me-1"></i>
@@ -53,7 +79,7 @@
         </div>
 
         {{-- Humidity --}}
-        <div class="col-xl-6">
+        <div class="col-lg-12">
             <div class="card mb-4">
                 <div class="card-header">
                     <i class="fas fa-chart-area me-1"></i>
@@ -66,7 +92,7 @@
 
     {{-- Soil Moisture --}}
     <div class="row">
-        <div class="col-xl-6">
+        <div class="col-lg-12">
             <div class="card mb-4">
                 <div class="card-header">
                     <i class="fas fa-chart-bar me-1"></i>
@@ -77,7 +103,7 @@
         </div>
 
         {{-- Intensity --}}
-        <div class="col-xl-6">
+        <div class="col-lg-12">
             <div class="card mb-4">
                 <div class="card-header">
                     <i class="fas fa-chart-bar me-1"></i>
@@ -434,6 +460,5 @@
                 name: 'Intensity Sensor'
             }]
         });
-
     </script>
 @endpush

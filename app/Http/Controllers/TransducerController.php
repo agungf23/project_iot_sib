@@ -19,7 +19,7 @@ class TransducerController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'device_name' => 'required',
+            'device_name' => 'required|string|max:255',
             'device_type' => 'required|in:Sensor,Actuator',
         ]);
 
