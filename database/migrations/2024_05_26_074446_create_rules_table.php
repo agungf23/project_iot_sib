@@ -17,7 +17,7 @@ return new class extends Migration
             $table->foreignId('sensor_id')->constrained('logs');
             $table->enum('sensor_operator', ['more than', 'less than']);
             $table->float('sensor_value');
-            $table->foreignId('actuator_id')->constrained('logs');
+            $table->foreignId('actuator_id')->constrained('tranducers');
             $table->integer('actuator_value');
             $table->timestamps();
         });

@@ -74,7 +74,7 @@
                         <nav class="sb-sidenav-menu-nested nav">
                             <a class="nav-link" href="{{ url('/transducers') }}">Device</a>
                             <a class="nav-link" href="{{ url('/logs') }}">Log</a>
-                            <a class="nav-link" href="layout-sidenav-light.html">User</a>
+                            <a class="nav-link" href="{{ url('/rules') }}">Rule</a>
                         </nav>
                     </div>
                 </div>
@@ -91,7 +91,7 @@
                     @yield('content')
                 </div>
             </main>
-            @unless(Request::is('transducers'))
+            @unless(Request::is('transducers') || Request::is('logs'))
             <footer class="py-4 bg-light mt-auto">
                 <div class="container-fluid px-4">
                     <div class="d-flex flex-column flex-md-row align-items-center justify-content-between small">

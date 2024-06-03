@@ -4,6 +4,7 @@ use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\TransducerController;
 use App\Http\Controllers\LogController;
+use App\Http\Controllers\RuleController;
 
 /*
 |--------------------------------------------------------------------------
@@ -37,11 +38,24 @@ Route::get('/transducers', function () {
 });
 Route::resource('api/transducers', TransducerController::class)->except(['create', 'edit']);
 
+// Menampilkan daftar log
+Route::get('/logs', [LogController::class, 'index'])->name('logs.index');
+Route::post('/logs', [LogController::class, 'store'])->name('logs.store');
+Route::get('/logss/{id}', [LogController::class, 'show'])->name('logs.show');
+Route::put('/log/{id}', [LogController::class, 'update'])->name('logs.update');
+Route::delete('/logs/{id}', [LogController::class, 'destroy'])->name('logs.destroy');
+Route::get('/logs/{id}/edit', [LogController::class, 'edit'])->name('logs.edit');
 
-
-Route::get('/logs', function () {
-    return view('logs');
+Route::get('/rule', function () {
+    return view('rule');
 });
-Route::resource('api/logs', LogController::class)->except(['create', 'edit']);
+
+Route::resource('rules', RuleController::class);
+
+
+
+
+
+
 
 

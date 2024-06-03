@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Models\Transducer;
 use App\Models\Log;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 
 class LogController extends Controller
 {
@@ -14,7 +13,8 @@ class LogController extends Controller
      */
     public function index()
     {
-        return Log::all();
+        $logs = Log::paginate(10); // atau Log::all();
+        return view('logs', compact('logs'));
     }
 
     /**
@@ -22,7 +22,7 @@ class LogController extends Controller
      */
     public function store(Request $request)
     {
-
+        // Validasi input
         $request->validate([
             'device_id' => 'required|exists:transducers,id',
             'value' => 'required|numeric',
@@ -37,13 +37,9 @@ class LogController extends Controller
         $datalog->min_value = $request->min_value;
         $datalog->save();
 
-        if(Transducer::where('id', $request->device_id)->exists()){
-            $transducer = Transducer::find($request->device_id);
-            $transducer->save();
-        }
         return response()->json(["message" => "Log Added."], 201);
-
     }
+
 
     // /**
     //  * Display the specified resource.
@@ -60,7 +56,7 @@ class LogController extends Controller
     {
         $request->validate([
             'device_id' => 'sometimes|required|exists:transducers,id',
-            'value' => 'sometimes|required|numeric',
+            'value' => 'sometimes|required|integer',
             'max_value' => 'sometimes|required|integer',
             'min_value' => 'sometimes|required|integer',
         ]);
@@ -80,10 +76,14 @@ class LogController extends Controller
     // /**
     //  * Remove the specified resource from storage.
     //  */
-    public function destroy(string $id)
+    public function destroy($id)
     {
-        $datalog = Log::find($id);
-        $datalog->delete();
-        return response()->json(["message" => "Log deleted."], 201);
+         $log = Log::find($id);
+        if ($log) {
+            $log->delete();
+            return response()->json(['message' => 'Log deleted successfully']);
+        } else {
+            return response()->json(['message' => 'Log not found'], 404);
+        }
     }
 }

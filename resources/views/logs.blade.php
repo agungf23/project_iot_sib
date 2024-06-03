@@ -7,7 +7,7 @@
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-        <title>Transducers Management</title>
+        <title>s Management</title>
         <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto|Varela+Round">
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
         <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
@@ -15,6 +15,7 @@
         <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
+
         <style>
             body {
                 color: #566787;
@@ -319,290 +320,211 @@
     </head>
 
     <body>
-        <!DOCTYPE html>
-        <html lang="en">
-
-        <head>
-            <meta charset="UTF-8">
-            <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title>Manajemen Transducers</title>
-            <link rel="stylesheet"
-                href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/css/bootstrap.min.css">
-            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
-            <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-            <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js"></script>
-        </head>
-
-        <body>
-            <h1 class="mt-4">Green House Monitoring System</h1>
-            <ol class="breadcrumb mb-4">
-                <li class="breadcrumb-item active">Device</li>
-            </ol>
-            <div class="container-xl">
-                <div class="table-responsive">
-                    <div class="table-wrapper">
-                        <div class="table-title">
-                            <div class="row">
-                                <div class="col-sm-6">
-                                    <h2>Manage <b>Transducers</b></h2>
-                                </div>
-                                <div class="col-sm-6">
-                                    <a href="#addTransducerModal" class="btn btn-success" data-toggle="modal"><i
-                                            class="material-icons">&#xE147;</i> <span>Add New Device</span></a>
-                                    <a href="#deleteTransducerModal" class="btn btn-danger" data-toggle="modal"><i
-                                            class="material-icons">&#xE15C;</i> <span>Delete</span></a>
-                                </div>
+        <h1 class="mt-4">Green House Monitoring System</h1>
+        <ol class="breadcrumb mb-4">
+            <li class="breadcrumb-item active">Logs</li>
+        </ol>
+        <div class="container-xl">
+            <div class="table-responsive">
+                <div class="table-wrapper">
+                    <div class="table-title">
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <h2>Manage <b>Logs</b></h2>
+                            </div>
+                            <div class="col-sm-6">
+                                <a href="#addLogModal" class="btn btn-success" data-toggle="modal"><i
+                                        class="material-icons">&#xE147;</i> <span>Add New Log</span></a>
+                                <a href="#deleteLogModal" class="btn btn-danger" data-toggle="modal"><i
+                                        class="material-icons">&#xE15C;</i> <span>Delete</span></a>
                             </div>
                         </div>
-                        <table class="table table-striped table-hover">
-                            <thead>
+                    </div>
+                    <table class="table table-striped table-hover">
+                        <thead>
+                            <tr>
+                                <th>
+                                    <span class="custom-checkbox">
+                                        <input type="checkbox" id="selectAll">
+                                        <label for="selectAll"></label>
+                                    </span>
+                                </th>
+                                <th>ID</th>
+                                <th>Device ID</th>
+                                <th>Value</th>
+                                <th>Max Value</th>
+                                <th>Min Value</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="logTableBody">
+                            @foreach ($logs as $log)
                                 <tr>
-                                    <th>
+                                    <td>
                                         <span class="custom-checkbox">
-                                            <input type="checkbox" id="selectAll">
-                                            <label for="selectAll"></label>
+                                            <input type="checkbox" id="checkbox{{ $log->id }}" name="options[]"
+                                                value="{{ $log->id }}">
+                                            <label for="checkbox{{ $log->id }}"></label>
                                         </span>
-                                    </th>
-                                    <th>ID</th>
-                                    <th>Device Name</th>
-                                    <th>Device Type</th>
-                                    <th>Actions</th>
+                                    </td>
+                                    <td>{{ $log->id }}</td>
+                                    <td>{{ $log->device_id }}</td>
+                                    <td>{{ $log->value }}</td>
+                                    <td>{{ $log->max_value }}</td>
+                                    <td>{{ $log->min_value }}</td>
+                                    <td>
+                                        <a href="#editLogModal" class="edit" data-toggle="modal"
+                                            data-id="{{ $log->id }}" onclick="editLog({{ $log->id }})"><i
+                                                class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a>
+                                        <a href="#deleteLogModal" class="delete" data-toggle="modal"
+                                            data-id="{{ $log->id }}" onclick="deleteLog({{ $log->id }})"><i
+                                                class="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i></a>
+                                    </td>
                                 </tr>
-                            </thead>
-                            <tbody id="transducerTableBody">
-                                <!-- Data transducers akan diisi di sini oleh JavaScript -->
-                            </tbody>
-                        </table>
-                        <div class="clearfix">
-                            <div class="hint-text">Showing <b>5</b> out of <b>25</b> entries</div>
-                            <ul class="pagination">
-                                <li class="page-item disabled"><a href="#">Previous</a></li>
-                                <li class="page-item"><a href="#" class="page-link">1</a></li>
-                                <li class="page-item"><a href="#" class="page-link">2</a></li>
-                                <li class="page-item active"><a href="#" class="page-link">3</a></li>
-                                <li class="page-item"><a href="#" class="page-link">4</a></li>
-                                <li class="page-item"><a href="#" class="page-link">5</a></li>
-                                <li class="page-item"><a href="#" class="page-link">Next</a></li>
-                            </ul>
+                            @endforeach
+                        </tbody>
+                    </table>
+                    <div class="clearfix">
+                        <div class="hint-text">Showing <b>5</b> out of <b>25</b> entries</div>
+                        <ul class="pagination">
+                            <li class="page-item disabled"><a href="#">Previous</a></li>
+                            <li class="page-item"><a href="#" class="page-link">1</a></li>
+                            <li class="page-item"><a href="#" class="page-link">2</a></li>
+                            <li class="page-item"><a href="#" class="page-link">3</a></li>
+                            <li class="page-item"><a href="#" class="page-link">4</a></li>
+                            <li class="page-item"><a href="#" class="page-link">5</a></li>
+                            <li class="page-item"><a href="#" class="page-link">Next</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Add Modal HTML -->
+        <div id="addLogModal" class="modal fade">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <form action="{{ route('logs.store') }}" method="POST">
+                        @csrf
+                        <div class="modal-header">
+                            <h4 class="modal-title">Add Log</h4>
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
                         </div>
-                    </div>
+                        <div class="modal-body">
+                            <div class="form-group">
+                                <label>Device ID</label>
+                                <input type="text" class="form-control" name="device_id" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Value</label>
+                                <input type="text" class="form-control" name="value" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Max Value</label>
+                                <input type="text" class="form-control" name="max_value" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Min Value</label>
+                                <input type="text" class="form-control" name="min_value" required>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
+                            <input type="submit" class="btn btn-success" value="Add">
+                        </div>
+                    </form>
                 </div>
             </div>
-            </div>
+        </div>
 
-            <!-- Add Modal HTML -->
-            <div id="addTransducerModal" class="modal fade">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <form id="createTransducerForm">
-                            @csrf
-                            <div class="modal-header">
-                                <h4 class="modal-title">Add Transducer</h4>
-                                <button type="button" class="close" data-dismiss="modal"
-                                    aria-hidden="true">&times;</button>
+        <!-- Edit Modal HTML -->
+        <div id="editLogModal" class="modal fade">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <form id="editForm" action="" method="POST">
+                        @csrf
+                        @method('PUT')
+                        <div class="modal-header">
+                            <h4 class="modal-title">Edit Log</h4>
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="form-group">
+                                <label>Device ID</label>
+                                <input type="text" class="form-control" name="device_id" id="edit_device_id" required>
                             </div>
-                            <div class="modal-body">
-                                <div class="form-group">
-                                    <label>Device Name</label>
-                                    <input type="text" id="device_name" name="device_name" class="form-control" required>
-                                </div>
-                                <div class="form-group">
-                                    <label>Device Type</label>
-                                    <select id="device_type" name="device_type" class="form-control" required>
-                                        <option value="Sensor">Sensor</option>
-                                        <option value="Actuator">Actuator</option>
-                                    </select>
-                                </div>
+                            <div class="form-group">
+                                <label>Value</label>
+                                <input type="text" class="form-control" name="value" id="edit_value" required>
                             </div>
-                            <div class="modal-footer">
-                                <input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
-                                <input type="submit" class="btn btn-success" value="Add">
+                            <div class="form-group">
+                                <label>Max Value</label>
+                                <input type="text" class="form-control" name="max_value" id="edit_max_value" required>
                             </div>
-                        </form>
-                    </div>
+                            <div class="form-group">
+                                <label>Min Value</label>
+                                <input type="text" class="form-control" name="min_value" id="edit_min_value" required>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
+                            <input type="submit" class="btn btn-info" value="Save">
+                        </div>
+                    </form>
                 </div>
             </div>
+        </div>
 
-            <!-- Edit Modal HTML -->
-            <div id="editTransducerModal" class="modal fade">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <form id="updateTransducerForm">
-                            @csrf
-                            @method('PUT')
-                            <input type="hidden" id="update_id" name="id">
-                            <div class="modal-header">
-                                <h4 class="modal-title">Edit Transducer</h4>
-                                <button type="button" class="close" data-dismiss="modal"
-                                    aria-hidden="true">&times;</button>
-                            </div>
-                            <div class="modal-body">
-                                <div class="form-group">
-                                    <label>Device Name</label>
-                                    <input type="text" id="update_device_name" name="device_name"
-                                        class="form-control" required>
-                                </div>
-                                <div class="form-group">
-                                    <label>Device Type</label>
-                                    <select id="update_device_type" name="device_type" class="form-control" required>
-                                        <option value="Sensor">Sensor</option>
-                                        <option value="Actuator">Actuator</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="modal-footer">
-                                <input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
-                                <input type="submit" class="btn btn-info" value="Save">
-                            </div>
-                        </form>
-                    </div>
+        <!-- Delete Modal HTML -->
+        <div id="deleteLogModal" class="modal fade">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <form id="deleteForm" action="" method="POST">
+                        @csrf
+                        @method('DELETE')
+                        <div class="modal-header">
+                            <h4 class="modal-title">Delete Log</h4>
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        </div>
+                        <div class="modal-body">
+                            <p>Are you sure you want to delete this log?</p>
+                            <p class="text-warning"><small>This action cannot be undone.</small></p>
+                        </div>
+                        <div class="modal-footer">
+                            <input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
+                            <input type="submit" class="btn btn-danger" value="Delete">
+                        </div>
+                    </form>
                 </div>
             </div>
+        </div>
 
-            <!-- Delete Modal HTML -->
-            <div id="deleteTransducerModal" class="modal fade">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <form id="deleteTransducerForm">
-                            @csrf
-                            @method('DELETE')
-                            <div class="modal-header">
-                                <h4 class="modal-title">Delete Device</h4>
-                                <button type="button" class="close" data-dismiss="modal"
-                                    aria-hidden="true">&times;</button>
-                            </div>
-                            <div class="modal-body">
-                                <p>Are you sure you want to delete these Records?</p>
-                                <p class="text-warning"><small>This action cannot be undone.</small></p>
-                            </div>
-                            <div class="modal-footer">
-                                <input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
-                                <input type="submit" class="btn btn-danger" value="Delete">
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </div>
+        <script>
+            $(document).ready(function () {
+                    $('#editLogModal').on('show.bs.modal', function (event) {
+                        var button = $(event.relatedTarget);
+                        var id = button.data('id');
+                        var device_id = button.data('device_id');
+                        var value = button.data('value');
+                        var max_value = button.data('max_value');
+                        var min_value = button.data('min_value');
 
-            <script>
-                $(document).ready(function() {
-                    fetchTransducers();
-
-                    // Fetch all transducers
-                    function fetchTransducers() {
-                        axios.get('/api/transducers')
-                            .then(response => {
-                                let transducers = response.data;
-                                let transducerTableBody = $('#transducerTableBody');
-                                transducerTableBody.empty();
-                                transducers.forEach(transducer => {
-                                    transducerTableBody.append(`
-                        <tr>
-                            <td>
-                                <span class="custom-checkbox">
-                                    <input type="checkbox" id="checkbox${transducer.id}" name="options[]" value="${transducer.id}">
-                                    <label for="checkbox${transducer.id}"></label>
-                                </span>
-                            </td>
-                            <td>${transducer.id}</td>
-                            <td>${transducer.device_name}</td>
-                            <td>${transducer.device_type}</td>
-                            <td>
-                                <a href="#editTransducerModal" class="edit" data-toggle="modal" onclick="editTransducer(${transducer.id})"><i
-                                        class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a>
-                                <a href="#deleteTransducerModal" class="delete" data-toggle="modal" onclick="deleteTransducer(${transducer.id})"><i
-                                        class="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i></a>
-                            </td>
-                        </tr>
-                    `);
-                                });
-                                $('#totalEntries').text(transducers.length);
-                            })
-                            .catch(error => {
-                                console.log(error);
-                            });
-                    }
-
-                    // Create new transducer
-                    $('#createTransducerForm').submit(function(event) {
-                        event.preventDefault();
-                        let formData = $(this).serialize();
-                        axios.post('/api/transducers', formData)
-                            .then(response => {
-                                alert(response.data.message);
-                                fetchTransducers();
-                                $('#createTransducerForm')[0].reset();
-                                $('#addTransducerModal').modal('hide');
-                            })
-                            .catch(error => {
-                                console.log(error);
-                            });
+                        var modal = $(this);
+                        modal.find('.modal-body #edit_device_id').val(device_id);
+                        modal.find('.modal-body #edit_value').val(value);
+                        modal.find('.modal-body #edit_max_value').val(max_value);
+                        modal.find('.modal-body #edit_min_value').val(min_value);
+                        $('#editForm').attr('action', '/logs/' + id);
                     });
 
-                    // Edit transducer
-                    window.editTransducer = function(id) {
-                        axios.get(`/api/transducers/${id}`)
-                            .then(response => {
-                                let transducer = response.data;
-                                $('#update_id').val(transducer.id);
-                                $('#update_device_name').val(transducer.device_name);
-                                $('#update_device_type').val(transducer.device_type);
-                            })
-                            .catch(error => {
-                                console.log(error);
-                            });
-                    };
-
-                    // Update transducer
-                    $('#updateTransducerForm').submit(function(event) {
-                        event.preventDefault();
-                        let id = $('#update_id').val();
-                        let formData = $(this).serialize();
-                        axios.put(`/api/transducers/${id}`, formData)
-                            .then(response => {
-                                alert(response.data.message);
-                                fetchTransducers();
-                                $('#updateTransducerForm')[0].reset();
-                                $('#editTransducerModal').modal('hide');
-                            })
-                            .catch(error => {
-                                console.log(error);
-                            });
+                    $('#deleteLogModal').on('show.bs.modal', function (event) {
+                        var button = $(event.relatedTarget);
+                        var id = button.data('id');
+                        $('#deleteForm').attr('action', '/logs/' + id);
                     });
-
-                    // Delete transducer
-                    window.deleteTransducer = function(id) {
-                        $('#deleteTransducerForm').submit(function(event) {
-                            event.preventDefault();
-                            axios.delete(`/api/transducers/${id}`)
-                                .then(response => {
-                                    alert(response.data.message);
-                                    fetchTransducers();
-                                    $('#deleteTransducerModal').modal('hide');
-                                })
-                                .catch(error => {
-                                    console.log(error);
-                                });
-                        });
-                    };
                 });
-            </script>
-
-            <footer class="py-4 bg-light mt-auto">
-                <div class="container-fluid px-4">
-                    <div class="d-flex flex-column flex-md-row align-items-center justify-content-between small">
-                        <div class="text-muted">Copyright &copy; Your Website 2023</div>
-                        <div class="text-center text-md-start">
-                            <a href="#">Privacy Policy</a>
-                            &middot;
-                            <a href="#">Terms &amp; Conditions</a>
-                        </div>
-                    </div>
-                </div>
-            </footer>
-            <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
-            <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-        </body>
+        </script>
+    </body>
 
     </html>
 @endsection
