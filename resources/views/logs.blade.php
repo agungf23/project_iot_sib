@@ -7,7 +7,7 @@
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-        <title>s Management</title>
+        <title>Logs Management</title>
         <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto|Varela+Round">
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
         <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
@@ -335,8 +335,6 @@
                             <div class="col-sm-6">
                                 <a href="#addLogModal" class="btn btn-success" data-toggle="modal"><i
                                         class="material-icons">&#xE147;</i> <span>Add New Log</span></a>
-                                <a href="#deleteLogModal" class="btn btn-danger" data-toggle="modal"><i
-                                        class="material-icons">&#xE15C;</i> <span>Delete</span></a>
                             </div>
                         </div>
                     </div>
@@ -385,16 +383,7 @@
                         </tbody>
                     </table>
                     <div class="clearfix">
-                        <div class="hint-text">Showing <b>5</b> out of <b>25</b> entries</div>
-                        <ul class="pagination">
-                            <li class="page-item disabled"><a href="#">Previous</a></li>
-                            <li class="page-item"><a href="#" class="page-link">1</a></li>
-                            <li class="page-item"><a href="#" class="page-link">2</a></li>
-                            <li class="page-item"><a href="#" class="page-link">3</a></li>
-                            <li class="page-item"><a href="#" class="page-link">4</a></li>
-                            <li class="page-item"><a href="#" class="page-link">5</a></li>
-                            <li class="page-item"><a href="#" class="page-link">Next</a></li>
-                        </ul>
+                        <div class="hint-text"><b>showing data logs</b></div>
                     </div>
                 </div>
             </div>
@@ -451,7 +440,8 @@
                         <div class="modal-body">
                             <div class="form-group">
                                 <label>Device ID</label>
-                                <input type="text" class="form-control" name="device_id" id="edit_device_id" required>
+                                <input type="text" class="form-control" name="device_id" id="edit_device_id"
+                                    required>
                             </div>
                             <div class="form-group">
                                 <label>Value</label>
@@ -459,11 +449,13 @@
                             </div>
                             <div class="form-group">
                                 <label>Max Value</label>
-                                <input type="text" class="form-control" name="max_value" id="edit_max_value" required>
+                                <input type="text" class="form-control" name="max_value" id="edit_max_value"
+                                    required>
                             </div>
                             <div class="form-group">
                                 <label>Min Value</label>
-                                <input type="text" class="form-control" name="min_value" id="edit_min_value" required>
+                                <input type="text" class="form-control" name="min_value" id="edit_min_value"
+                                    required>
                             </div>
                         </div>
                         <div class="modal-footer">
@@ -500,31 +492,77 @@
         </div>
 
         <script>
-            $(document).ready(function () {
-                    $('#editLogModal').on('show.bs.modal', function (event) {
-                        var button = $(event.relatedTarget);
-                        var id = button.data('id');
-                        var device_id = button.data('device_id');
-                        var value = button.data('value');
-                        var max_value = button.data('max_value');
-                        var min_value = button.data('min_value');
+            $(document).ready(function(){
+                $('#editLogModal').on('show.bs.modal', function(event) {
+                    var button = $(event.relatedTarget);
+                    var id = button.data('id');
+                    var device_id = button.data('device_id');
+                    var value = button.data('value');
+                    var max_value = button.data('max_value');
+                    var min_value = button.data('min_value');
+                    var modal = $(this);
+                    modal.find('.modal-body #edit_device_id').val(device_id);
+                    modal.find('.modal-body #edit_value').val(value);
+                    modal.find('.modal-body #edit_max_value').val(max_value);
+                    modal.find('.modal-body #edit_min_value').val(min_value);
+                    $('#editForm').attr('action', '/logs/' + id);
+                });
 
-                        var modal = $(this);
-                        modal.find('.modal-body #edit_device_id').val(device_id);
-                        modal.find('.modal-body #edit_value').val(value);
-                        modal.find('.modal-body #edit_max_value').val(max_value);
-                        modal.find('.modal-body #edit_min_value').val(min_value);
-                        $('#editForm').attr('action', '/logs/' + id);
-                    });
+                $('#deleteLogModal').on('show.bs.modal', function(event) {
+                    var button = $(event.relatedTarget);
+                    var id = button.data('id');
+                    $('#deleteForm').attr('action', '/logs/' + id);
+                });
 
-                    $('#deleteLogModal').on('show.bs.modal', function (event) {
-                        var button = $(event.relatedTarget);
-                        var id = button.data('id');
-                        $('#deleteForm').attr('action', '/logs/' + id);
+                // Handle form submissions via AJAX
+                $('#editForm').on('submit', function(e) {
+                    e.preventDefault();
+                    var form = $(this);
+                    $.ajax({
+                        type: 'POST',
+                        url: form.attr('action'),
+                        data: form.serialize(),
+                        success: function(response) {
+                            $('#editLogModal').modal('hide');
+                            location.reload();
+                        },
+                        error: function(response) {
+                            console.error('Failed to update log:', response);
+                            alert('Failed to update log.');
+                        }
                     });
                 });
-        </script>
-    </body>
 
+                $('#deleteForm').on('submit', function(e) {
+                    e.preventDefault();
+                    var form = $(this);
+                    $.ajax({
+                        type: 'POST',
+                        url: form.attr('action'),
+                        data: form.serialize(),
+                        success: function(response) {
+                            $('#deleteLogModal').modal('hide');
+                            location.reload();
+                        },
+                        error: function(response) {
+                            alert('Failed to delete log.');
+                        }
+                    });
+                });
+            });
+        </script>
+        <footer class="breadcrumb mb-4">
+            <div class="container-fluid px-4">
+                <div class="d-flex flex-column flex-md-row align-items-center justify-content-between small">
+                    <div class="text-muted">Copyright &copy; Your Website 2023</div>
+                    <div class="text-center text-md-start">
+                        <a href="#">Privacy Policy</a>
+                        &middot;
+                        <a href="#">Terms &amp; Conditions</a>
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </body>
     </html>
 @endsection

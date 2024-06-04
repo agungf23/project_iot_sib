@@ -7,18 +7,14 @@
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-        <title>Devices Management</title>
+        <title>Rules Management</title>
         <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto|Varela+Round">
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
         <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-
         <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js"></script>
-
         <style>
             body {
                 color: #566787;
@@ -322,11 +318,10 @@
         </script>
     </head>
 
-
     <body>
         <h1 class="mt-4">Green House Monitoring System</h1>
         <ol class="breadcrumb mb-4">
-            <li class="breadcrumb-item active">Devices</li>
+            <li class="breadcrumb-item active">Rules</li>
         </ol>
         <div class="container-xl">
             <div class="table-responsive">
@@ -334,11 +329,11 @@
                     <div class="table-title">
                         <div class="row">
                             <div class="col-sm-6">
-                                <h2>Manage <b>Devices</b></h2>
+                                <h2>Manage <b>Rules</b></h2>
                             </div>
                             <div class="col-sm-6">
-                                <a href="#addTransducerModal" class="btn btn-success" data-toggle="modal"><i
-                                        class="material-icons">&#xE147;</i> <span>Add New Device</span></a>
+                                <a href="#addRuleModal" class="btn btn-success" data-toggle="modal"><i
+                                        class="material-icons">&#xE147;</i> <span>Add New Rules</span></a>
                             </div>
                         </div>
                     </div>
@@ -352,45 +347,76 @@
                                         <label for="selectAll"></label>
                                     </span>
                                 </th>
-                                <th>ID</th>
-                                <th>Device Name</th>
-                                <th>Device Type</th>
-                                <th>Actions</th>
+                                <th>Rule Cluster ID</th>
+                                <th>Sensor ID</th>
+                                <th>Sensor Operator</th>
+                                <th>Sensor Value</th>
+                                <th>Actuator ID</th>
+                                <th>Actuator Value</th>
                             </tr>
                         </thead>
-                        <tbody id="transducerTableBody">
-                            <!-- Data transducers akan diisi di sini oleh JavaScript -->
+                        <tbody id="ruleTableBody">
+                            @foreach ($rules as $rule)
+                                <tr>
+                                    <td>
+                                        <span class="custom-checkbox">
+                                            <input type="checkbox" id="checkbox{{ $rule->id }}" name="options[]"
+                                                value="{{ $rule->id }}">
+                                            <label for="checkbox{{ $rule->id }}"></label>
+                                        </span>
+                                    </td>
+                                    <td>{{ $rule->rule_cluster_id }}</td>
+                                    <td>{{ $rule->sensor_id }}</td>
+                                    <td>{{ $rule->sensor_operator }}</td>
+                                    <td>{{ $rule->sensor_value }}</td>
+                                    <td>{{ $rule->actuator_id }}</td>
+                                    <td>{{ $rule->actuator_value }}</td>
+                                </tr>
+                            @endforeach
                         </tbody>
                     </table>
                     <div class="clearfix">
-                        <div class="hint-text"><b>showing data devices</b></div>
+                        <div class="hint-text"><b>showing data rules</b></div>
+                    </div>
                 </div>
             </div>
         </div>
         </div>
-        </div>
 
         <!-- Add Modal HTML -->
-        <div id="addTransducerModal" class="modal fade">
+        <div id="addRuleModal" class="modal fade">
             <div class="modal-dialog">
                 <div class="modal-content">
-                    <form id="createTransducerForm">
+                    <form action="{{ route('rules.store') }}" method="POST">
                         @csrf
                         <div class="modal-header">
-                            <h4 class="modal-title">Add Transducer</h4>
-                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                            <h4 class="modal-title">Add Rule</h4>
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
                         </div>
                         <div class="modal-body">
                             <div class="form-group">
-                                <label>Device Name</label>
-                                <input type="text" id="device_name" name="device_name" class="form-control" required>
+                                <label>Rule Cluster ID</label>
+                                <input type="text" class="form-control" name="rule_cluster_id" required>
                             </div>
                             <div class="form-group">
-                                <label>Device Type</label>
-                                <select id="device_type" name="device_type" class="form-control" required>
-                                    <option value="Sensor">Sensor</option>
-                                    <option value="Actuator">Actuator</option>
-                                </select>
+                                <label>Sensor ID</label>
+                                <input type="text" class="form-control" name="sensor_id" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Sensor Operator</label>
+                                <input type="text" class="form-control" name="sensor_operator" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Sensor Value</label>
+                                <input type="text" class="form-control" name="sensor_value" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Actuator ID</label>
+                                <input type="text" class="form-control" name="actuator_id" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Actuator Value</label>
+                                <input type="text" class="form-control" name="actuator_value" required>
                             </div>
                         </div>
                         <div class="modal-footer">
@@ -401,193 +427,6 @@
                 </div>
             </div>
         </div>
-
-        <!-- Edit Modal HTML -->
-        <div id="editTransducerModal" class="modal fade">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <form id="updateTransducerForm">
-                        @csrf
-                        @method('PUT')
-                        <input type="hidden" id="update_id" name="id">
-                        <div class="modal-header">
-                            <h4 class="modal-title">Edit Transducer</h4>
-                            <button type="button" class="close" data-dismiss="modal"
-                                aria-hidden="true">&times;</button>
-                        </div>
-                        <div class="modal-body">
-                            <div class="form-group">
-                                <label>Device Name</label>
-                                <input type="text" id="update_device_name" name="device_name" class="form-control"
-                                    required>
-                            </div>
-                            <div class="form-group">
-                                <label>Device Type</label>
-                                <select id="update_device_type" name="device_type" class="form-control" required>
-                                    <option value="Sensor">Sensor</option>
-                                    <option value="Actuator">Actuator</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="modal-footer">
-                            <input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
-                            <input type="submit" class="btn btn-info" value="Save">
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-
-        <!-- Delete Modal HTML -->
-        <div id="deleteTransducerModal" class="modal fade">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <form id="deleteTransducerForm">
-                        @csrf
-                        @method('DELETE')
-                        <div class="modal-header">
-                            <h4 class="modal-title">Delete Device</h4>
-                            <button type="button" class="close" data-dismiss="modal"
-                                aria-hidden="true">&times;</button>
-                        </div>
-                        <div class="modal-body">
-                            <p>Are you sure you want to delete these Records?</p>
-                            <p class="text-warning"><small>This action cannot be undone.</small></p>
-                        </div>
-                        <div class="modal-footer">
-                            <input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
-                            <input type="submit" class="btn btn-danger" value="Delete">
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-
-        <script>
-            $(document).ready(function() {
-                fetchTransducers();
-
-                // Fetch all transducers
-                function fetchTransducers() {
-                    axios.get('/api/transducers')
-                        .then(response => {
-                            let transducers = response.data;
-                            let transducerTableBody = $('#transducerTableBody');
-                            transducerTableBody.empty();
-                            transducers.forEach(transducer => {
-                                transducerTableBody.append(`
-                        <tr>
-                            <td>
-                                <span class="custom-checkbox">
-                                    <input type="checkbox" id="selectAll${transducer.id}" name="options[]" value="${transducer.id}">
-                                    <label for="checkbox${transducer.id}"></label>
-                                </span>
-                            </td>
-                            <td>${transducer.id}</td>
-                            <td>${transducer.device_name}</td>
-                            <td>${transducer.device_type}</td>
-                            <td>
-                                <a href="#editTransducerModal" class="edit" data-toggle="modal" onclick="editTransducer(${transducer.id})"><i
-                                        class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a>
-                                <a href="#deleteTransducerModal" class="delete" data-toggle="modal" onclick="deleteTransducer(${transducer.id})"><i
-                                        class="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i></a>
-                            </td>
-                        </tr>
-                    `);
-                            });
-                            addCheckboxEventListeners();
-                        })
-                        .catch(error => {
-                            console.log(error);
-                        });
-                }
-
-                // Create new transducer
-                $('#createTransducerForm').submit(function(event) {
-                    event.preventDefault();
-                    let formData = $(this).serialize();
-                    axios.post('/api/transducer', formData)
-                        .then(response => {
-                            alert(response.data.message);
-                            fetchTransducers();
-                            $('#createTransducerForm')[0].reset();
-                            $('#addTransducerModal').modal('hide');
-                        })
-                        .catch(error => {
-                            console.log(error);
-                        });
-                });
-
-                // Edit transducer
-                window.editTransducer = function(id) {
-                    axios.get(`/api/transducers/${id}`)
-                        .then(response => {
-                            let transducer = response.data;
-                            $('#update_id').val(transducer.id);
-                            $('#update_device_name').val(transducer.device_name);
-                            $('#update_device_type').val(transducer.device_type);
-                        })
-                        .catch(error => {
-                            console.log(error);
-                        });
-                };
-
-                // Update transducer
-                $('#updateTransducerForm').submit(function(event) {
-                    event.preventDefault();
-                    let id = $('#update_id').val();
-                    let formData = $(this).serialize();
-                    axios.put(`/api/transducers/${id}`, formData)
-                        .then(response => {
-                            alert(response.data.message);
-                            fetchTransducers();
-                            $('#updateTransducerForm')[0].reset();
-                            $('#editTransducerModal').modal('hide');
-                        })
-                        .catch(error => {
-                            console.log(error);
-                        });
-                });
-
-                // Delete transducer
-                window.deleteTransducer = function(id) {
-                    $('#deleteTransducerForm').submit(function(event) {
-                        event.preventDefault();
-                        axios.delete(`/api/transducers/${id}`)
-                            .then(response => {
-                                alert(response.data.message);
-                                fetchTransducers();
-                                $('#deleteTransducerModal').modal('hide');
-                            })
-                            .catch(error => {
-                                console.log(error);
-                            });
-                    });
-                };
-            });
-
-
-            // Add event listeners to checkboxes
-            function addCheckboxEventListeners() {
-                var checkbox = $('table tbody input[type="checkbox"]');
-                $("#selectAll").off('click').on('click', function() {
-                    if (this.checked) {
-                        checkbox.each(function() {
-                            this.checked = true;
-                        });
-                    } else {
-                        checkbox.each(function() {
-                            this.checked = false;
-                        });
-                    }
-                });
-                checkbox.off('click').on('click', function() {
-                    if (!this.checked) {
-                        $("#selectAll").prop("checked", false);
-                    }
-                });
-            }
-        </script>
 
         <footer class="breadcrumb mb-4">
             <div class="container-fluid px-4">

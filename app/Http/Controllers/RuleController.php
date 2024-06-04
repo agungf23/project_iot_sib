@@ -7,31 +7,34 @@ use Illuminate\Http\Request;
 
 class RuleController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+    public function index(Request $request)
     {
-        return Rule::all();
+        $rules = Rule::paginate(10);
+        if ($request->wantsJson()) {
+            return response()->json($rules);
+        }
+        return view('rules', compact('rules'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-        $request->validate([
-            'rule_cluster_id' => 'required|integer',
-            'sensor_id' => 'required|exists:logs,id',
-            'sensor_operator' => 'required|in:more than,less than',
-            'sensor_value' => 'required|numeric',
-            'actuator_id' => 'required|exists:logs,id',
-            'actuator_value' => 'required|numeric',
+        $validated = $request->validate([
+            'rule_cluster_id' => 'required',
+            'sensor_id' => 'required',
+            'sensor_operator' => 'required',
+            'sensor_value' => 'required',
+            'actuator_id' => 'required',
+            'actuator_value' => 'required',
         ]);
 
-        $rule = Rule::create($request->all());
-
-        return response()->json(['message' => 'Rule created successfully.', 'rule' => $rule], 201);
+        $rule = new Rule();
+        $rule->rule_cluster_id = $validated['rule_cluster_id'];
+        $rule->sensor_id = $validated['sensor_id'];
+        $rule->sensor_operator = $validated['sensor_operator'];
+        $rule->sensor_value = $validated['sensor_value'];
+        $rule->actuator_id = $validated['actuator_id'];
+        $rule->actuator_value = $validated['actuator_value'];
+        $rule->save();
     }
 
     /**
@@ -39,8 +42,7 @@ class RuleController extends Controller
      */
     public function show(string $id)
     {
-        $rule = Rule::findOrFail($id);
-        return $rule;
+        return Rule::find($id);
     }
 
     /**
@@ -57,23 +59,22 @@ class RuleController extends Controller
             'actuator_value' => 'sometimes|required|numeric',
         ]);
 
-        $rule = Rule::findOrFail($id);
-        $rule->update($request->all());
-
-        return response()->json(['message' => 'Rule updated successfully.', 'rule' => $rule], 200);
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        if (Rule::where('rule_id', $id)->exists()) {
-            $rule = Rule::find($id);
-            $rule->delete();
-            return response()->json(["message" => "Rule deleted."], 201);
+        $rule = Rule::find($id);
+        if ($rule) {
+            $rule->update($request->all());
+            return response()->json(["message" => "Rule updated successfully.", "rule" => $rule], 200);
         } else {
             return response()->json(["message" => "Rule not found."], 404);
+        }
+    }
+
+    public function destroy($id)
+    {
+        $rule = Rule::find($id);
+        if ($rule) {
+            $rule->delete();
+        } else {
+            return response()->json(['message' => 'Log not found'], 404);
         }
     }
 }

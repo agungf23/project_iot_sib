@@ -91,7 +91,7 @@
                     @yield('content')
                 </div>
             </main>
-            @unless(Request::is('transducers') || Request::is('logs'))
+            @unless(Request::is('transducers') || Request::is('logs') || Request::is('rules'))
             <footer class="py-4 bg-light mt-auto">
                 <div class="container-fluid px-4">
                     <div class="d-flex flex-column flex-md-row align-items-center justify-content-between small">

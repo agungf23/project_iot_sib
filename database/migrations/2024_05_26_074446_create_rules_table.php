@@ -14,10 +14,10 @@ return new class extends Migration
         Schema::create('rules', function (Blueprint $table) {
             $table->id('rule_id');
             $table->integer('rule_cluster_id');
-            $table->foreignId('sensor_id')->constrained('logs');
+            $table->foreignId('sensor_id')->constrained('logs')->onDelete('cascade');
             $table->enum('sensor_operator', ['more than', 'less than']);
             $table->float('sensor_value');
-            $table->foreignId('actuator_id')->constrained('tranducers');
+            $table->foreignId('actuator_id')->constrained('logs')->onDelete('cascade');
             $table->integer('actuator_value');
             $table->timestamps();
         });

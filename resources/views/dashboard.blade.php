@@ -1,15 +1,23 @@
 @extends('layouts.app')
 
 @section('content')
-    <h1 class="mt-4">Dashboard</h1>
+
+<div class="bg-light text-dark p-3 mb-4 mt-4 border">
+    <h1 class="mt-4">Green House Monitoring System</h1>
+    <ol class="breadcrumb mb-4">
+        <li class="breadcrumb-item active">Dashboard</li>
+    </ol>
+</div>
+
+
 
     <div class="row">
         <div class="col-xl-3 col-md-6">
             <div class="card bg-primary text-white mb-4">
                 <div class="card-body">Temperature Sensor</div>
                 <div class="card-footer d-flex align-items-center justify-content-between">
-                    <a class="small text-white stretched-link" href="#">View Data</a>
-                    <div class="small text-white"><i class="fas fa-angle-right"></i></div>
+                    <p id="temperature-value">Loading...</p>
+                    <div class="small text-white"></i></div>
                 </div>
             </div>
         </div>
@@ -17,8 +25,8 @@
             <div class="card bg-warning text-white mb-4">
                 <div class="card-body">Humidity Sensor</div>
                 <div class="card-footer d-flex align-items-center justify-content-between">
-                    <a class="small text-white stretched-link" href="#">View Data</a>
-                    <div class="small text-white"><i class="fas fa-angle-right"></i></div>
+                    <p id="humidity-value">Loading...</p>
+                    <div class="small text-white"></i></div>
                 </div>
             </div>
         </div>
@@ -26,8 +34,8 @@
             <div class="card bg-success text-white mb-4">
                 <div class="card-body">Soil Moisture Sensor</div>
                 <div class="card-footer d-flex align-items-center justify-content-between">
-                    <a class="small text-white stretched-link" href="#">View Data</a>
-                    <div class="small text-white"><i class="fas fa-angle-right"></i></div>
+                    <p id="moisture-value">Loading...</p>
+                    <div class="small text-white"></i></div>
                 </div>
             </div>
         </div>
@@ -35,8 +43,8 @@
             <div class="card bg-danger text-white mb-4">
                 <div class="card-body">Intensity Sensor</div>
                 <div class="card-footer d-flex align-items-center justify-content-between">
-                    <a class="small text-white stretched-link" href="#">View Data</a>
-                    <div class="small text-white"><i class="fas fa-angle-right"></i></div>
+                    <p id="intensity-value">Loading...</p>
+                    <div class="small text-white"></i></div>
                 </div>
             </div>
         </div>
@@ -70,9 +78,9 @@
     <div class="row">
         <div class="col-lg-12">
             <div class="card mb-4">
-                <div class="card-header">
+                <div class="card-header bg-primary">
                     <i class="fas fa-chart-area me-1"></i>
-                    Temperature Sensor Data Graphics
+                    <b>Temperature Sensor Data Graphics</b>
                 </div>
                 <div class="card-body" id="temperature-sensor"></div>
             </div>
@@ -81,9 +89,9 @@
         {{-- Humidity --}}
         <div class="col-lg-12">
             <div class="card mb-4">
-                <div class="card-header">
+                <div class="card-header bg-warning">
                     <i class="fas fa-chart-area me-1"></i>
-                    Humidity Sensor Data Graphics
+                    <b>Humidity Sensor Data Graphics</b>
                 </div>
                 <div class="card-body" id="humidity-sensor"></div>
             </div>
@@ -94,9 +102,9 @@
     <div class="row">
         <div class="col-lg-12">
             <div class="card mb-4">
-                <div class="card-header">
+                <div class="card-header bg-success">
                     <i class="fas fa-chart-bar me-1"></i>
-                    Soil Moisture Sensor Data Graphics
+                    <b>Soil Moisture Sensor Data Graphics</b>
                 </div>
                 <div class="card-body" id="moisture-sensor"></div>
             </div>
@@ -105,9 +113,9 @@
         {{-- Intensity --}}
         <div class="col-lg-12">
             <div class="card mb-4">
-                <div class="card-header">
+                <div class="card-header bg-danger">
                     <i class="fas fa-chart-bar me-1"></i>
-                    Intensity Sensor Data Graphics
+                    <b>Intensity Sensor Data Graphics</b>
                 </div>
                 <div class="card-body" id="intensity-sensor"></div>
             </div>

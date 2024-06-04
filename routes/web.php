@@ -41,16 +41,20 @@ Route::resource('api/transducers', TransducerController::class)->except(['create
 // Menampilkan daftar log
 Route::get('/logs', [LogController::class, 'index'])->name('logs.index');
 Route::post('/logs', [LogController::class, 'store'])->name('logs.store');
-Route::get('/logss/{id}', [LogController::class, 'show'])->name('logs.show');
-Route::put('/log/{id}', [LogController::class, 'update'])->name('logs.update');
+Route::get('/logs/{id}', [LogController::class, 'show'])->name('logs.show');
+Route::put('/logs/{id}', [LogController::class, 'update'])->name('logs.update');
 Route::delete('/logs/{id}', [LogController::class, 'destroy'])->name('logs.destroy');
-Route::get('/logs/{id}/edit', [LogController::class, 'edit'])->name('logs.edit');
 
-Route::get('/rule', function () {
-    return view('rule');
-});
+Route::get('/rules', [RuleController::class, 'index'])->name('rules.index');
+Route::post('/rules', [RuleController::class, 'store'])->name('rules.store');
+Route::get('/rules/{id}', [RuleController::class, 'show'])->name('rules.show');
+Route::put('/rules/{id}', [RuleController::class, 'update'])->name('rules.update');
+Route::delete('/rules/{id}', [RuleController::class, 'destroy'])->name('rules.destroy');
 
-Route::resource('rules', RuleController::class);
+
+
+
+
 
 
 
