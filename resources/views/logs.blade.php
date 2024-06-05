@@ -365,7 +365,7 @@
                                             <label for="checkbox{{ $log->id }}"></label>
                                         </span>
                                     </td>
-                                    <td>{{ $log->id }}</td>
+                                    <td><a href="/api/logs/{{ $log->id }}" class="log-detail" data-id="{{ $log->id }}">{{ $log->id }}</a></td>
                                     <td>{{ $log->device_id }}</td>
                                     <td>{{ $log->value }}</td>
                                     <td>{{ $log->max_value }}</td>
@@ -492,7 +492,7 @@
         </div>
 
         <script>
-            $(document).ready(function(){
+            $(document).ready(function() {
                 $('#editLogModal').on('show.bs.modal', function(event) {
                     var button = $(event.relatedTarget);
                     var id = button.data('id');
@@ -549,6 +549,7 @@
                         }
                     });
                 });
+
             });
         </script>
         <footer class="breadcrumb mb-4">
@@ -564,5 +565,6 @@
             </div>
         </footer>
     </body>
+
     </html>
 @endsection

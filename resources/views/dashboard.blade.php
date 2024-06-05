@@ -1,15 +1,12 @@
 @extends('layouts.app')
 
 @section('content')
-
-<div class="bg-light text-dark p-3 mb-4 mt-4 border">
-    <h1 class="mt-4">Green House Monitoring System</h1>
-    <ol class="breadcrumb mb-4">
-        <li class="breadcrumb-item active">Dashboard</li>
-    </ol>
-</div>
-
-
+    <div class="bg-light text-dark p-3 mb-4 mt-4 border">
+        <h1 class="mt-4">Green House Monitoring System</h1>
+        <ol class="breadcrumb mb-4">
+            <li class="breadcrumb-item active">Dashboard</li>
+        </ol>
+    </div>
 
     <div class="row">
         <div class="col-xl-3 col-md-6">

@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Transducer;
 use Illuminate\Http\Request;
+use PhpMqtt\Client\Facades\MQTT;
+use Illuminate\Support\Facades\Log;
 
 class TransducerController extends Controller
 {
@@ -22,12 +24,28 @@ class TransducerController extends Controller
             'device_type' => 'required|in:Sensor,Actuator',
         ]);
 
-            $transducer = new Transducer();
-            $transducer->device_name = $request->device_name;
-            $transducer->device_type = $request->device_type;
-            $transducer->save();
 
-            return response()->json(["message" => "Device updated."], 201);
+        $transducer = new Transducer();
+        $transducer->device_name = $request->device_name;
+        $transducer->device_type = $request->device_type;
+        if ($transducer->save()) {
+            $data = [
+              'device_name' => $request->device_name,
+              'device_type' => $request->device_type,
+            ];
+
+            try {
+              $mqtt = MQTT::connection();
+              $mqtt->publish('device/devices', json_encode($data));
+              Log::info('Published device data to MQTT topic: device/devices'); // Log successful publish
+            } catch (\Exception $e) {
+              Log::error('Error publishing data to MQTT: ' . $e->getMessage()); // Log any errors
+            }
+
+            return response()->json(["message" => "Device created and published to MQTT."], 201);
+          } else {
+            return response()->json(["message" => "Failed to create device."], 500);
+        }
     }
 
     // Display the specified resource.

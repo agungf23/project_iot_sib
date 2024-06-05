@@ -29,7 +29,14 @@ class LogController extends Controller
         $datalog->value = $request->value;
         $datalog->max_value = $request->max_value;
         $datalog->min_value = $request->min_value;
-        $datalog->save();
+
+        try {
+            $datalog->save();
+            return response()->json(["message" => "Log data saved successfully."], 201);
+        } catch (\Exception $e) {
+            // Handle database errors or other exceptions
+            return response()->json(["message" => "Failed to save log data: " . $e->getMessage()], 500);
+        }
     }
 
     public function show(string $id)
